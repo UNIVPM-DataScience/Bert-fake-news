@@ -100,7 +100,6 @@ Contributions are welcome!
 3. Commit your changes
 4. Push the branch and open a pull request
 
-> For large feature changes, please open an issue first to discuss ideas and improvements.
 
 ---
 
@@ -111,14 +110,6 @@ This project does not yet have a formal license file. Assume academic and person
 
 ---
 
-## 📚 References
-
-* [BERT: Pre-training of Deep Bidirectional Transformers](https://arxiv.org/abs/1810.04805)
-* [ISOT Fake News Dataset](https://www.uvic.ca/engineering/ece/isot/datasets/fake-news/index.php)
-* [Hugging Face Transformers](https://huggingface.co/transformers/)
-* [Colab Demo for BERT Fine-Tuning](https://colab.research.google.com/)
-
----
 
 
 > 🧠 Developed as part of an educational data science project by the UNIVPM Data Science Group.
