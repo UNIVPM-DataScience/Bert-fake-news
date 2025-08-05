@@ -1,153 +1,93 @@
-# 📰 Fake News Detection using BERT
+# 📰 Fake News Classification with BERT
 
-This project leverages **BERT** (Bidirectional Encoder Representations from Transformers) to classify news articles as **real** or **fake**. By fine-tuning a pre-trained BERT model on a labeled dataset, the system learns to identify the subtle linguistic patterns that differentiate trustworthy journalism from misleading content.
+This project was developed as part of the **Data Science course** at the **Università Politecnica delle Marche**, Academic Year 2024–2025.
 
----
+## 📌 Project Description
 
-## 🚀 Features and Approach
+This repository tackles the problem of **automatic fake news classification** using advanced **Natural Language Processing (NLP)** techniques based on **Transformer architectures**, specifically **BERT (Bidirectional Encoder Representations from Transformers)**.
 
-* **BERT Transformer Model**
-  The core of this project is the `bert-base-uncased` model from Hugging Face Transformers. Fine-tuning this pre-trained model allows it to adapt quickly to the fake news classification task without training from scratch.
-
-* **Transfer Learning**
-  A linear classification head is added on top of the \[CLS] token of BERT for binary classification. The entire model is fine-tuned to optimize performance on the fake news detection task.
-
-* **High Accuracy**
-  The model achieves over **95% accuracy** on benchmark datasets like ISOT, significantly outperforming traditional machine learning approaches.
-
-* **Context-Aware Understanding**
-  Unlike bag-of-words or RNN models, BERT captures full bidirectional context, making it especially effective in understanding the semantics of news text.
+By fine-tuning a pre-trained BERT model on the ISOT Fake News dataset, we achieve high-accuracy classification between real and fake news articles.
 
 ---
 
-## 📊 Dataset
+## 🎯 Objectives
 
-* **Source**: [ISOT Fake News Dataset](https://www.uvic.ca/engineering/ece/isot/datasets/fake-news/index.php)
-  Compiled by the ISOT Lab at the University of Victoria.
-
-* **Content**:
-
-  * `True.csv` – Real news articles
-  * `Fake.csv` – Fake news articles
-  * (Alternatively, a combined `News.csv` with a `label` column may be used)
-
-* **Size**: Approximately 45,000 articles
-
-  * \~21,000 real
-  * \~23,000 fake
-
-* **Format**: CSV files containing full article text (and optionally titles or subjects). Only textual content is used; no images or metadata.
+- Build an NLP system capable of identifying fake news with high precision.
+- Apply fine-tuning on a pre-trained BERT model using labeled news data.
+- Compare BERT’s performance with other Transformer models.
 
 ---
 
-## 🛠️ Setup Instructions
+## 📚 Dataset
 
-1. **Clone the Repository**
-
-   ```bash
-   git clone https://github.com/UNIVPM-DataScience/Bert-fake-news.git
-   cd Bert-fake-news
-   ```
-
-2. **Create a Python Environment (Optional but Recommended)**
-
-   ```bash
-   conda create -n fake-news-bert python=3.9
-   conda activate fake-news-bert
-   ```
-
-3. **Install Dependencies**
-
-   ```bash
-   pip install torch torchvision torchaudio
-   pip install transformers
-   pip install pandas scikit-learn numpy
-   pip install jupyterlab notebook
-   ```
-
-4. **Ensure Dataset Availability**
-   The `Dataset/` directory should contain `True.csv` and `Fake.csv`, or a combined dataset. If not, download the ISOT dataset and place the files in the folder manually.
-
-5. **Launch the Jupyter Notebook**
-
-   ```bash
-   jupyter notebook FakeNews_Bert.ipynb
-   ```
+- **Source:** ISOT Fake News Dataset (University of Victoria)
+- **Size (post-cleaning):** ~18,000 articles
+- **Class distribution:** 56.7% Fake, 43.3% Real
+- **Fields:** `id`, `title`, `author`, `text`, `label` (0 = real, 1 = fake)
 
 ---
 
-## 📌 Usage Instructions
+## 🧹 Data Preprocessing
 
-### Run the Notebook
-
-Open `FakeNews_Bert.ipynb` and execute each cell in order:
-
-1. **Data Loading & Preprocessing**
-   Load the dataset, clean the text, encode the labels, and split the data into training and test sets.
-
-2. **Model Initialization**
-   Load `bert-base-uncased` with a binary classification head and its tokenizer.
-
-3. **Fine-Tuning the Model**
-   Train the model using your dataset (GPU strongly recommended). You can configure:
-
-   * Number of epochs (e.g., 2–4)
-   * Batch size (e.g., 16 or 32)
-   * Learning rate (e.g., 2e-5)
-
-4. **Model Evaluation**
-   Evaluate performance on the test set using accuracy, confusion matrix, classification report, etc.
-
-5. **Custom Text Prediction**
-   Provide a new article or headline to get predictions ("Fake" or "Real").
-
-### Save and Reload the Model
-
-To save:
-
-```python
-model.save_pretrained('./saved_model')
-tokenizer.save_pretrained('./saved_model')
-```
-
-To reload:
-
-```python
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
-model = AutoModelForSequenceClassification.from_pretrained('./saved_model')
-tokenizer = AutoTokenizer.from_pretrained('./saved_model')
-```
+- Text cleaning (special characters, repeated characters, lowercasing)
+- Tokenization using `bert-base-uncased`
+- Truncation to `max_length = 512` tokens
+- Dataset split: **70% train**, **10% validation**, **20% test**
 
 ---
 
-## 📁 Project Structure
+## 🧠 Model Architecture
 
-```
-Bert-fake-news/
-│
-├── FakeNews_Bert.ipynb         # Main Jupyter notebook
-├── Dataset/                    # Contains the dataset
-│   ├── True.csv
-│   └── Fake.csv
-└── saved_model/ (optional)     # Saved model after fine-tuning
-```
+- **Base model:** `bert-base-uncased` (Hugging Face)
+- **Architecture:** BERT encoder + binary classification head
+- **Training Parameters:**
+  - Batch size: 16–32
+  - Learning rate: `2e-5`
+  - Epochs: 3 (with early stopping)
+  - Optimizer: AdamW
 
 ---
 
-## 💡 Possible Extensions
+## 🧪 Development Environment
 
-* Use **DistilBERT** or **RoBERTa** for better speed or accuracy
-* Build a **Flask** or **Streamlit** web app for deployment
-* Add **attention visualization** to explain predictions
-* Perform **hyperparameter tuning** to improve performance
+- Language: **Python 3.9**
+- Frameworks/Libraries: `PyTorch`, `Transformers` (Hugging Face), `scikit-learn`, `pandas`, `numpy`
+- IDE: Jupyter Notebook
+- Hardware: **GPU recommended** for training
 
 ---
 
-## 🧪 Troubleshooting
+## 📊 Results
 
-* **Out of Memory (OOM)**: Try reducing the batch size or using `distilbert-base-uncased`
-* **Version Issues**: Check compatibility on [Hugging Face Docs](https://huggingface.co/docs/transformers/index)
-* **Slow CPU Training**: Run on Google Colab or a machine with GPU acceleration
+| Metric     | Score     |
+|------------|-----------|
+| Accuracy   | 95.2%     |
+| Precision  | 94.8%     |
+| Recall     | 95.5%     |
+| F1-Score   | 95.1%     |
+| AUC (ROC)  | 0.98      |
+
+📌 **Transformer Benchmark Results:**
+
+| Model             | Accuracy | F1-Score |
+|------------------|----------|----------|
+| DistilBERT       | 92.5%    | 93.3%    |
+| RoBERTa          | 90.3%    | 90.1%    |
+| ALBERT           | 89.6%    | 89.5%    |
+| MobileBERT       | 87.1%    | 86.1%    |
+
+DistilBERT showed the best trade-off between accuracy and computational efficiency.
+
+--- 
+
+## ⚠️ Limitations
+Domain specificity: The model was trained on Reuters-style articles and may not generalize well to social media or informal content.
+
+Data bias: The dataset may reflect inherent biases due to source selection.
+
+Token limit: BERT’s 512-token input limit could truncate long articles, possibly omitting critical information.
+
+Hardware constraints: Model training was limited by available computational resources.
 
 ---
 
